@@ -12,8 +12,11 @@ export const site = {
     cidade: "Maceió",
     estado: "AL",
   },
-  // TODO: trocar pelo domínio definitivo antes do deploy
-  url: "https://lucianogois.com.br",
+  /**
+   * Alimenta canonical, Open Graph e sitemap. Em produção vem de
+   * NEXT_PUBLIC_SITE_URL; o valor fixo é só o fallback do ambiente local.
+   */
+  url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://lucianogois.com.br",
   descricao:
     "Compra, venda e investimentos imobiliários em Maceió e região, com mais de 20 anos de experiência no mercado alagoano.",
   fotos: {
