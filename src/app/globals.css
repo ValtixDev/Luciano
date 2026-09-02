@@ -1,0 +1,278 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Marca: 70% claro · 20% azul · 10% dourado ---- */
+  --color-navy: #081f4c;
+  --color-navy-950: #040f28;
+  --color-navy-900: #061737;
+  --color-navy-700: #0c2a63;
+  --color-navy-500: #16437f;
+  --color-offwhite: #f7f6f2;
+  --color-sand: #e8e4da;
+  --color-sand-dark: #d6d0c2;
+  --color-gold: #c2a24c;
+  --color-gold-soft: #e0cd9a;
+  --color-gold-dim: #8f7530;
+  /* Amostrado do PNG do logo — mais quente que o --color-gold dos acentos. */
+  --color-gold-marca: #eb9912;
+  --color-gold-marca-claro: #f7ad2c;
+  --color-graphite: #14161a;
+  --color-muted: #6b7078;
+
+  --font-display: var(--font-fraunces), "Iowan Old Style", Georgia, serif;
+  --font-sans: var(--font-inter-tight), ui-sans-serif, system-ui, -apple-system, sans-serif;
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-card: 28px;
+  --radius-xl: 32px;
+  --radius-2xl: 36px;
+
+  --ease-out-soft: cubic-bezier(0.22, 0.68, 0.24, 1);
+
+  --animate-fade-up: fade-up 0.9s var(--ease-out-soft) both;
+  --animate-fade-in: fade-in 1.1s var(--ease-out-soft) both;
+  --animate-line: line-grow 1.2s var(--ease-out-soft) both;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ponto-digitando {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.35;
+  }
+  30% {
+    transform: translateY(-3px);
+    opacity: 1;
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes line-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* `clip` em vez de `hidden`: impede arrasto lateral sem quebrar
+       `position: sticky` dos filtros e do card do imóvel. */
+    overflow-x: clip;
+  }
+
+  body {
+    overflow-x: clip;
+    background: #fff;
+    color: var(--color-graphite);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv05" 1, "ss03" 1;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Fraunces: baixo "wonk", ótica de display, peso com presença. */
+  .font-display,
+  h1,
+  h2,
+  h3 {
+    font-variation-settings: "SOFT" 0, "WONK" 0, "opsz" 96;
+  }
+
+  ::selection {
+    background: var(--color-navy);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+}
+
+/* ---------------------------------------------------------- layout */
+@utility container-page {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 1280px;
+  /* 20px no celular, 24px a partir de 640px */
+  padding-inline: 1.25rem;
+}
+
+@media (width >= 40rem) {
+  .container-page {
+    padding-inline: 1.5rem;
+  }
+}
+
+@utility eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------- tipografia fluida */
+@utility display-hero {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.75rem, 5.6vw, 5rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+/* Títulos das páginas internas: frases longas, então um grau abaixo do hero. */
+@utility display-pagina {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 4.4vw, 3.75rem);
+  line-height: 1.06;
+  letter-spacing: -0.028em;
+}
+
+@utility display-1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.25rem, 4.2vw, 3.5rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+
+@utility display-2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 2.6vw, 2.375rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+}
+
+@utility display-3 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 1.375rem;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+@utility lead {
+  font-size: clamp(1rem, 1.15vw, 1.125rem);
+  line-height: 1.65;
+}
+
+@utility num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* ---------------------------------------------------------- movimento */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 0.85s var(--ease-out-soft),
+    transform 0.85s var(--ease-out-soft);
+}
+
+@utility is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Sublinhado que cresce a partir da esquerda. */
+@utility link-rule {
+  position: relative;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+
+/* Filtros do catálogo: recolhíveis no celular, sempre abertos no desktop. */
+.filtros > summary::-webkit-details-marker {
+  display: none;
+}
+
+@media (width >= 64rem) {
+  .filtros > summary {
+    display: none;
+  }
+  .filtros:not([open]) > form {
+    display: block;
+  }
+}
+
+/* ---------------------------------------------------------- textura */
+@utility grain {
+  position: relative;
+}
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* Régua dourada fina usada como marcador de seção. */
+@utility rule-gold {
+  display: block;
+  height: 1px;
+  width: 3rem;
+  background: linear-gradient(
+    to right,
+    var(--color-gold),
+    color-mix(in srgb, var(--color-gold) 20%, transparent)
+  );
+  transform-origin: left;
+}
