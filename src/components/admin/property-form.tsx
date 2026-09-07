@@ -266,7 +266,7 @@ export function PropertyForm({ imovel }: { imovel?: Imovel }) {
 
       {/* COLUNA LATERAL */}
       <aside className="space-y-6">
-        <div className="sticky top-6 space-y-6">
+        <div className="space-y-6 xl:sticky xl:top-6">
           <Fieldset titulo="Publicação">
             <div className="grid gap-4">
               <Field label="Status">

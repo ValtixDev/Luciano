@@ -78,7 +78,71 @@ export default async function AdminLeadsPage({
           texto="Assim que um contato chegar pelo site ou pelo assistente, ele aparece aqui."
         />
       ) : (
-        <Card className="overflow-hidden">
+        <>
+        <ul className="space-y-3 lg:hidden">
+          {lista.map((lead) => (
+            <li key={lead.id}>
+              <Card className="p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-semibold text-graphite">{lead.nome}</p>
+                    <a
+                      href={`https://wa.me/55${lead.telefone.replace(/\D/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="num mt-0.5 block text-xs text-navy"
+                    >
+                      {lead.telefone}
+                    </a>
+                  </div>
+                  <Badge cor={statusLeadCor[lead.status]}>
+                    {statusLeadLabel[lead.status]}
+                  </Badge>
+                </div>
+
+                {lead.mensagem && (
+                  <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-muted">
+                    {lead.mensagem}
+                  </p>
+                )}
+
+                <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[0.6875rem] text-muted">
+                  <span>{origemLabel[lead.origem]}</span>
+                  <span className="h-px w-4 bg-sand-dark" />
+                  <span>{formatDataHora(lead.criadoEm)}</span>
+                  {lead.imovelSlug && (
+                    <Link
+                      href={`/imovel/${lead.imovelSlug}`}
+                      target="_blank"
+                      className="w-full truncate text-navy"
+                    >
+                      {lead.imovelTitulo}
+                    </Link>
+                  )}
+                </div>
+
+                <form action={atualizarStatusLead} className="mt-3 flex gap-2 border-t border-sand pt-3">
+                  <input type="hidden" name="id" value={lead.id} />
+                  <Select name="status" defaultValue={lead.status} className="h-9 flex-1 text-xs">
+                    {statusOrdem.map((st) => (
+                      <option key={st} value={st}>
+                        {statusLeadLabel[st]}
+                      </option>
+                    ))}
+                  </Select>
+                  <button
+                    type="submit"
+                    className="h-9 shrink-0 rounded-lg bg-navy px-4 text-xs font-semibold text-white"
+                  >
+                    Salvar
+                  </button>
+                </form>
+              </Card>
+            </li>
+          ))}
+        </ul>
+
+        <Card className="hidden overflow-hidden lg:block">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[64rem] border-collapse text-sm">
               <thead className="border-b border-sand bg-offwhite">
@@ -164,6 +228,7 @@ export default async function AdminLeadsPage({
             </table>
           </div>
         </Card>
+        </>
       )}
     </>
   );

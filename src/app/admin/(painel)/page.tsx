@@ -42,7 +42,7 @@ export default async function AdminDashboard() {
         }
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-5">
         <StatCard rotulo="Imóveis ativos" valor={m.imoveisAtivos} nota="Publicados no site" />
         <StatCard rotulo="Em destaque" valor={m.emDestaque} nota="Aparecem na home" />
         <StatCard
@@ -58,7 +58,7 @@ export default async function AdminDashboard() {
         <StatCard rotulo="Portais conectados" valor="0/3" nota="Feeds ainda não publicados" />
       </div>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[1.4fr_1fr]">
+      <div className="mt-4 grid gap-4 sm:mt-6 sm:gap-6 xl:grid-cols-[1.4fr_1fr]">
         {/* GRÁFICO */}
         <Card className="p-6">
           <div className="mb-7 flex items-baseline justify-between">

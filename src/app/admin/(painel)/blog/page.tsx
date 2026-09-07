@@ -40,7 +40,63 @@ export default async function AdminBlogPage() {
           }
         />
       ) : (
-        <Card className="overflow-hidden">
+        <>
+        <ul className="space-y-3 lg:hidden">
+          {lista.map((p) => (
+            <li key={p.slug}>
+              <Card className="p-4">
+                <div className="flex gap-3">
+                  {p.capa ? (
+                    <Image
+                      src={p.capa.src}
+                      alt=""
+                      width={160}
+                      height={100}
+                      sizes="80px"
+                      className="h-14 w-20 shrink-0 rounded-lg object-cover"
+                    />
+                  ) : (
+                    <span className="flex h-14 w-20 shrink-0 items-center justify-center rounded-lg border border-dashed border-sand-dark text-[0.5625rem] text-muted">
+                      sem capa
+                    </span>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <p className="line-clamp-2 font-semibold text-graphite">{p.titulo}</p>
+                    <p className="mt-1 text-xs text-muted">
+                      {p.categoria} · {p.publicadoEm ? formatData(p.publicadoEm) : "sem data"}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex items-center gap-3 border-t border-sand pt-3">
+                  <Badge
+                    cor={
+                      p.status === "publicado"
+                        ? "bg-emerald-100 text-emerald-800"
+                        : "bg-neutral-200 text-neutral-600"
+                    }
+                  >
+                    {p.status === "publicado" ? "Publicado" : "Rascunho"}
+                  </Badge>
+                  <span className="ml-auto flex items-center gap-3">
+                    <Link href={`/admin/blog/${p.slug}`} className="text-xs font-semibold text-navy">
+                      Editar
+                    </Link>
+                    <Link
+                      href={`/blog/${p.slug}`}
+                      target="_blank"
+                      className="text-xs font-semibold text-muted"
+                    >
+                      Ver
+                    </Link>
+                  </span>
+                </div>
+              </Card>
+            </li>
+          ))}
+        </ul>
+
+        <Card className="hidden overflow-hidden lg:block">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[52rem] border-collapse text-sm">
               <thead className="border-b border-sand bg-offwhite">
@@ -116,6 +172,7 @@ export default async function AdminBlogPage() {
             </table>
           </div>
         </Card>
+        </>
       )}
     </>
   );

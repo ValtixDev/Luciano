@@ -13,7 +13,9 @@ export function PageHeader({
   return (
     <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
       <div>
-        <h1 className="font-display text-[2rem] leading-none tracking-tight text-navy">{titulo}</h1>
+        <h1 className="font-display text-2xl leading-tight tracking-tight text-navy sm:text-[2rem] sm:leading-none">
+        {titulo}
+      </h1>
         {descricao && <p className="mt-1.5 text-sm text-muted">{descricao}</p>}
       </div>
       {acao}
@@ -49,7 +51,9 @@ export function StatCard({
   return (
     <Card className="px-5 py-5">
       <p className="eyebrow text-muted">{rotulo}</p>
-      <p className="num mt-3 font-display text-[2rem] leading-none tracking-tight text-navy">{valor}</p>
+      <p className="num mt-2 font-display text-2xl leading-none tracking-tight text-navy sm:mt-3 sm:text-[2rem]">
+        {valor}
+      </p>
       {nota && <p className="mt-2 text-xs text-muted">{nota}</p>}
     </Card>
   );

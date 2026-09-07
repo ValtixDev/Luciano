@@ -59,7 +59,66 @@ export default async function AdminImoveisPage() {
           }
         />
       ) : (
-        <Card className="overflow-hidden">
+        <>
+        {/* No celular a tabela vira lista: oito colunas em rolagem horizontal
+            são inutilizáveis em tela pequena. */}
+        <ul className="space-y-3 lg:hidden">
+          {lista.map((i, idx) => (
+            <li key={i.id}>
+              <Card className="p-4">
+                <div className="flex gap-3">
+                  <div className="size-16 shrink-0 overflow-hidden rounded-xl">
+                    <FotoImovel
+                      foto={i.fotos[0]}
+                      alt={i.titulo}
+                      seed={idx}
+                      sizes="64px"
+                      className="h-full w-full"
+                    />
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-semibold text-graphite">{i.titulo}</p>
+                    <p className="mt-0.5 text-xs text-muted">
+                      {tipoLabel[i.tipo]} · {i.bairro}, {i.cidade}
+                    </p>
+                    <p className="num mt-1.5 text-sm font-semibold text-navy">
+                      {formatPreco(i.preco, i.precoSobConsulta)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-sand pt-3">
+                  <Badge cor={statusImovelCor[i.status]}>{statusLabel[i.status]}</Badge>
+                  <PortalTag ativo={i.publicarSite} nome="Site" />
+                  <PortalTag ativo={i.publicarOlx} nome="OLX" />
+                  <PortalTag ativo={i.publicarZap} nome="ZAP" />
+                  {i.isPlaceholder && (
+                    <span className="text-[0.625rem] text-muted">placeholder</span>
+                  )}
+
+                  <span className="ml-auto flex items-center gap-3">
+                    <Link
+                      href={`/admin/imoveis/${i.id}`}
+                      className="text-xs font-semibold text-navy"
+                    >
+                      Editar
+                    </Link>
+                    <Link
+                      href={`/imovel/${i.slug}`}
+                      target="_blank"
+                      className="text-xs font-semibold text-muted"
+                    >
+                      Ver
+                    </Link>
+                  </span>
+                </div>
+              </Card>
+            </li>
+          ))}
+        </ul>
+
+        <Card className="hidden overflow-hidden lg:block">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[68rem] border-collapse text-sm">
               <thead className="border-b border-sand bg-offwhite">
@@ -145,6 +204,7 @@ export default async function AdminImoveisPage() {
             </table>
           </div>
         </Card>
+        </>
       )}
     </>
   );
