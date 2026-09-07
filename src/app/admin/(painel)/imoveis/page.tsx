@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PropertyPhoto } from "@/components/property-photo";
+import { FotoImovel } from "@/components/foto-imovel";
 import {
   AdminLinkButton,
   Badge,
@@ -79,10 +79,15 @@ export default async function AdminImoveisPage() {
                   <tr key={i.id} className="transition-colors hover:bg-offwhite/60">
                     <td className={td}>
                       <div className="flex items-center gap-3">
-                        <PropertyPhoto
-                          seed={idx}
-                          className="size-12 shrink-0 rounded-xl"
-                        />
+                        <div className="size-12 shrink-0 overflow-hidden rounded-xl">
+                          <FotoImovel
+                            foto={i.fotos[0]}
+                            alt={i.titulo}
+                            seed={idx}
+                            sizes="48px"
+                            className="h-full w-full"
+                          />
+                        </div>
                         <div className="min-w-0">
                           <p className="truncate font-semibold text-graphite">
                             {i.titulo}
