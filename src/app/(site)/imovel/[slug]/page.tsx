@@ -95,7 +95,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
       />
 
       <div className="bg-offwhite pt-32">
-        <nav className="container-page py-5 text-xs text-muted" aria-label="Trilha">
+        <nav className="container-page flex flex-wrap gap-x-1 py-5 text-xs text-muted" aria-label="Trilha">
           <Link href="/" className="hover:text-navy">
             Início
           </Link>
@@ -165,7 +165,9 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
               {tipoLabel[imovel.tipo]} · {estagioLabel[imovel.estagio]} · {imovel.codigo}
             </p>
             <span className="rule-gold mt-5" />
-            <h1 className="display-1 mt-5 text-navy sm:mt-6">{imovel.titulo}</h1>
+            <h1 className="display-1 texto-quebravel mt-5 text-navy sm:mt-6">
+              {imovel.titulo}
+            </h1>
             <p className="mt-4 text-base text-muted">
               {imovel.bairro} · {imovel.cidade} · {imovel.estado}
             </p>
@@ -190,7 +192,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
 
             <div className="mt-12 border-t border-sand pt-10">
               <h2 className="display-2 text-navy">Sobre este imóvel</h2>
-              <p className="mt-5 text-base leading-[1.75] text-muted">
+              <p className="texto-quebravel mt-5 text-base leading-[1.75] text-muted">
                 {imovel.descricao}
               </p>
             </div>
@@ -199,7 +201,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
               <h2 className="display-2 text-navy">Diferenciais</h2>
               <ul className="mt-5 grid gap-2.5 sm:grid-cols-2">
                 {imovel.diferenciais.map((d) => (
-                  <li key={d} className="flex items-center gap-3 border-b border-sand pb-2.5 text-sm text-graphite">
+                  <li key={d} className="texto-quebravel flex items-center gap-3 border-b border-sand pb-2.5 text-sm text-graphite">
                     <span className="size-1.5 shrink-0 rounded-full bg-gold" />
                     {d}
                   </li>

@@ -66,7 +66,7 @@ export function PropertyCard({
           <p className="eyebrow text-[0.5625rem] text-gold-dim">
             {tipoLabel[imovel.tipo]} · {estagioLabel[imovel.estagio]}
           </p>
-          <h3 className="display-3 text-navy transition-colors duration-300 group-hover:text-navy-500">
+          <h3 className="display-3 texto-quebravel text-navy transition-colors duration-300 group-hover:text-navy-500">
             {imovel.titulo}
           </h3>
           <p className="text-sm text-muted">

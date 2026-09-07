@@ -81,7 +81,7 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
 
             <p className="eyebrow mt-10 text-gold-dim">{post.categoria}</p>
             <span className="rule-gold mt-4" />
-            <h1 className="display-1 mt-6 text-navy">{post.titulo}</h1>
+            <h1 className="display-1 texto-quebravel mt-6 text-navy">{post.titulo}</h1>
             <p className="lead mt-6 text-muted">{post.resumo}</p>
             <p className="mt-7 text-xs text-muted">
               Por {post.autor} · {formatData(post.publicadoEm)} · {post.tempoLeitura} min
@@ -101,7 +101,9 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
           </div>
           <div className="mt-10 space-y-6 text-base leading-[1.75] text-graphite sm:mt-14 sm:space-y-7 sm:text-[1.0625rem] sm:leading-[1.8]">
             {post.conteudo.map((paragrafo, i) => (
-              <p key={i}>{paragrafo}</p>
+              <p key={i} className="texto-quebravel">
+                {paragrafo}
+              </p>
             ))}
           </div>
 
