@@ -14,7 +14,7 @@ export function PageHero({
   children?: ReactNode;
 }) {
   return (
-    <section className="grain relative overflow-hidden bg-navy pb-16 pt-32 text-white sm:pb-24 sm:pt-40">
+    <section className="grain relative overflow-hidden bg-navy pb-16 pt-36 text-white sm:pb-24 sm:pt-40">
       <div className="absolute inset-0 bg-[radial-gradient(100%_120%_at_80%_0%,#16437f_0%,#081f4c_50%,#040f28_100%)]" />
       <div className="absolute -left-24 bottom-0 hidden size-[26rem] rounded-full border border-white/[0.06] lg:block" />
       {/* Fecha o hero exatamente em navy-950, que é onde a rampa da próxima

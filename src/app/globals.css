@@ -184,6 +184,23 @@
   text-transform: uppercase;
 }
 
+/* Altura do hero.
+   `dvh` acompanha a área visível enquanto a barra do navegador recolhe — é o
+   que faz o azul preencher a tela no celular. `svh` seria o menor viewport, e
+   deixaria uma faixa da próxima seção aparecendo. `vh` fica de reserva para
+   navegador antigo. */
+@utility hero-cheio {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+@media (width >= 40rem) {
+  .hero-cheio {
+    min-height: 88vh;
+    min-height: 88dvh;
+  }
+}
+
 /* ---------------------------------------------------------- tipografia fluida */
 @utility display-hero {
   font-family: var(--font-display);

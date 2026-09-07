@@ -52,11 +52,11 @@ export default async function Home() {
   return (
     <>
       {/* ---------------------------------------------------------- HERO */}
-      <section className="grain relative flex min-h-[76svh] items-center overflow-hidden bg-navy text-white sm:min-h-[88svh]">
+      <section className="hero-cheio grain relative flex items-center overflow-hidden bg-navy text-white">
         <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_78%_18%,#16437f_0%,#081f4c_45%,#040f28_100%)]" />
         {/* Fecha o hero exatamente em navy-950, que é onde a rampa da próxima
             seção começa — sem isso sobra um fio de emenda. */}
-        <div className="container-page relative grid items-center gap-12 py-16 sm:gap-16 sm:py-32 lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="container-page relative grid items-center gap-12 pb-20 pt-32 sm:gap-16 sm:py-32 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="max-w-2xl">
             <p
               className="eyebrow animate-fade-in text-gold"
