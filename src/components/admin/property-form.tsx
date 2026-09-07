@@ -212,16 +212,9 @@ export function PropertyForm({ imovel }: { imovel?: Imovel }) {
 
         <Fieldset
           titulo="Fotos"
-          descricao="A capa é usada no catálogo e no Open Graph. As fotos são salvas na hora, independentes do botão de salvar."
+          descricao="Arraste para reordenar; a primeira é a capa. Cada foto tem zoom e ponto focal próprios."
         >
-          {imovel ? (
-            <GerenciadorFotos imovelId={imovel.id} fotos={imovel.fotos} />
-          ) : (
-            <p className="rounded-lg border border-dashed border-sand-dark bg-offwhite px-5 py-8 text-center text-sm text-muted">
-              Cadastre o imóvel primeiro. As fotos precisam de um imóvel
-              existente para serem vinculadas.
-            </p>
-          )}
+          <GerenciadorFotos imovelId={imovel?.id} fotos={imovel?.fotos ?? []} />
         </Fieldset>
 
         <Fieldset titulo="Diferenciais">

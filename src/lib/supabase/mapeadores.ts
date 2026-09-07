@@ -3,10 +3,14 @@ import type { Foto, Imovel, Post } from "@/types";
 
 /** Linha de `imovel_fotos` com o caminho no bucket. */
 type LinhaFoto = {
+  id: string;
   storage_path: string;
   alt: string | null;
   ordem: number;
   capa: boolean;
+  zoom: number | string | null;
+  pos_x: number | string | null;
+  pos_y: number | string | null;
 };
 
 export type LinhaImovel = {
@@ -54,11 +58,18 @@ const urlPublica = (caminho: string) =>
 export function mapearImovel(linha: LinhaImovel): Imovel {
   const fotos: Foto[] = (linha.imovel_fotos ?? [])
     .slice()
+    // Capa primeiro; o resto na ordem definida no painel.
     .sort((a, b) => Number(b.capa) - Number(a.capa) || a.ordem - b.ordem)
     .map((f) => ({
+      id: f.id,
+      caminho: f.storage_path,
       url: urlPublica(f.storage_path),
       alt: f.alt ?? linha.titulo,
+      ordem: f.ordem,
       capa: f.capa,
+      zoom: Number(f.zoom ?? 1),
+      posX: Number(f.pos_x ?? 50),
+      posY: Number(f.pos_y ?? 50),
     }));
 
   return {
@@ -142,7 +153,7 @@ export const CAMPOS_IMOVEL = `
   area_util, area_total, quartos, suites, banheiros, vagas,
   diferenciais, destaque, publicar_site, publicar_olx, publicar_zap,
   is_placeholder, atualizado_em,
-  imovel_fotos ( storage_path, alt, ordem, capa )
+  imovel_fotos ( id, storage_path, alt, ordem, capa, zoom, pos_x, pos_y )
 `;
 
 export const CAMPOS_POST = `
@@ -161,5 +172,5 @@ export const CAMPOS_IMOVEL_RESUMO = `
   area_util, area_total, quartos, suites, banheiros, vagas,
   diferenciais, destaque, publicar_site, publicar_olx, publicar_zap,
   is_placeholder, atualizado_em,
-  imovel_fotos ( storage_path, alt, ordem, capa )
+  imovel_fotos ( id, storage_path, alt, ordem, capa, zoom, pos_x, pos_y )
 `;

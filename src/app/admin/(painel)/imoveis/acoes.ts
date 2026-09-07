@@ -99,9 +99,22 @@ export async function salvarImovel(
   };
 
   const id = texto(formData, "id");
-  const { error } = id
-    ? await sb.from("imoveis").update(registro).eq("id", id)
-    : await sb.from("imoveis").insert(registro);
+
+  // No cadastro, o id vem do gerenciador de fotos: os arquivos já foram
+  // enviados para uma pasta com esse nome antes do imóvel existir.
+  const idProvisorio = texto(formData, "imovelIdProvisorio");
+
+  // Três ramos em vez de um objeto montado: o supabase-js infere as colunas do
+  // literal recebido, então `id` precisa estar presente já na chamada.
+  const { data, error } = id
+    ? await sb.from("imoveis").update(registro).eq("id", id).select("id").single()
+    : idProvisorio
+      ? await sb
+          .from("imoveis")
+          .insert({ ...registro, id: idProvisorio })
+          .select("id")
+          .single()
+      : await sb.from("imoveis").insert(registro).select("id").single();
 
   if (error) {
     if (error.code === "23505") {
@@ -112,6 +125,41 @@ export async function salvarImovel(
       return { erro: "Sua conta não tem permissão de escrita. Confira a tabela `admins`." };
     }
     return { erro: `Não foi possível salvar: ${error.message}` };
+  }
+
+  // Só agora as fotos podem virar linhas: a chave estrangeira exige o imóvel.
+  if (!id && data?.id) {
+    const bruto = texto(formData, "fotosNovas");
+    if (bruto) {
+      try {
+        const enviadas = JSON.parse(bruto) as {
+          caminho: string;
+          ordem: number;
+          capa: boolean;
+          zoom: number;
+          pos_x: number;
+          pos_y: number;
+        }[];
+
+        if (enviadas.length > 0) {
+          await sb.from("imovel_fotos").insert(
+            enviadas.map((f) => ({
+              imovel_id: data.id,
+              storage_path: f.caminho,
+              alt: "",
+              ordem: f.ordem,
+              capa: f.capa,
+              zoom: f.zoom,
+              pos_x: f.pos_x,
+              pos_y: f.pos_y,
+            })),
+          );
+        }
+      } catch {
+        // Imóvel já foi criado; perder o vínculo das fotos não justifica
+        // desfazer o cadastro. O usuário reenvia pela tela de edição.
+      }
+    }
   }
 
   revalidatePath("/admin/imoveis");

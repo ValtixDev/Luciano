@@ -3,7 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PropertyCard } from "@/components/property-card";
 import { Reveal } from "@/components/reveal";
-import { Monogram, PropertyPhoto } from "@/components/property-photo";
+import { FotoImovel } from "@/components/foto-imovel";
+import { Monogram } from "@/components/property-photo";
 import { estiloBotao, Seta } from "@/components/ui/button";
 import { formatArea, formatPreco } from "@/lib/format";
 import {
@@ -115,18 +116,35 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
         <div className="container-page pb-12">
           {/* Altura fixa pelo grid: as duas colunas terminam alinhadas. */}
           <div className="grid gap-3 lg:h-[32rem] lg:grid-cols-[2fr_1fr] lg:grid-rows-2">
-            <PropertyPhoto
-              seed={0}
-              className="aspect-16/10 rounded-card lg:row-span-2 lg:aspect-auto lg:h-full"
-              rotulo={imovel.titulo}
-            />
-            <div className="grid grid-cols-2 gap-3 lg:contents">
-              <PropertyPhoto
-                seed={1}
-                className="aspect-4/3 rounded-card lg:aspect-auto lg:h-full"
+            <div className="aspect-16/10 overflow-hidden rounded-card lg:row-span-2 lg:aspect-auto lg:h-full">
+              <FotoImovel
+                foto={imovel.fotos[0]}
+                alt={imovel.titulo}
+                sizes="(min-width: 1024px) 66vw, 100vw"
+                priority
+                className="h-full w-full"
               />
+            </div>
+            <div className="grid grid-cols-2 gap-3 lg:contents">
+              <div className="aspect-4/3 overflow-hidden rounded-card lg:aspect-auto lg:h-full">
+                <FotoImovel
+                  foto={imovel.fotos[1]}
+                  alt={imovel.titulo}
+                  seed={1}
+                  sizes="(min-width: 1024px) 33vw, 50vw"
+                  className="h-full w-full"
+                />
+              </div>
               <div className="group relative aspect-4/3 lg:aspect-auto lg:h-full">
-                <PropertyPhoto seed={2} className="h-full rounded-card" />
+                <div className="h-full overflow-hidden rounded-card">
+                  <FotoImovel
+                    foto={imovel.fotos[2]}
+                    alt={imovel.titulo}
+                    seed={2}
+                    sizes="(min-width: 1024px) 33vw, 50vw"
+                    className="h-full w-full"
+                  />
+                </div>
                 <div className="absolute inset-0 flex items-center justify-center rounded-card bg-navy-950/60 transition-colors duration-400 group-hover:bg-navy-950/45">
                   <span className="text-sm font-semibold text-white">
                     Ver todas as {imovel.totalFotos} fotos

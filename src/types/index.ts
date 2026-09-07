@@ -14,9 +14,17 @@ export type StatusImovel =
 export type EstagioObra = "pronto" | "em_construcao" | "na_planta";
 
 export type Foto = {
+  id: string;
+  /** Caminho no bucket. Necessário para atualizar e remover. */
+  caminho: string;
   url: string | null;
   alt: string;
-  capa?: boolean;
+  ordem: number;
+  capa: boolean;
+  /** Enquadramento: 1 = sem zoom; ponto focal em porcentagem. */
+  zoom: number;
+  posX: number;
+  posY: number;
 };
 
 export type Imovel = {
