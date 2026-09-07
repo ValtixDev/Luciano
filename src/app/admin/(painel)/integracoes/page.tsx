@@ -1,135 +1,147 @@
 import type { Metadata } from "next";
-import { AdminButton, Badge, Card, PageHeader } from "@/components/admin/ui";
-import { listarImoveisAdmin } from "@/lib/supabase/painel";
+import Link from "next/link";
+import { AdminLinkButton, Badge, Card, PageHeader } from "@/components/admin/ui";
+import { CopiarLink } from "@/components/admin/copiar-link";
+import { imoveisParaPortais } from "@/lib/feeds";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = { title: "Integrações" };
-
-type Portal = {
-  nome: string;
-  descricao: string;
-  feed: string;
-  estado: "conectado" | "pendente" | "desconectado";
-  nota: string;
-};
-
-const portais: Portal[] = [
-  {
-    nome: "ZAP Imóveis",
-    descricao: "Distribuição via feed XML no padrão VRSync.",
-    feed: "/feed/vrsync.xml",
-    estado: "conectado",
-    nota: "Última leitura há 3 horas · 5 imóveis enviados",
-  },
-  {
-    nome: "VivaReal",
-    descricao: "Mesmo feed do ZAP — ambos pertencem ao grupo ZAP+.",
-    feed: "/feed/vrsync.xml",
-    estado: "conectado",
-    nota: "Última leitura há 3 horas · 5 imóveis enviados",
-  },
-  {
-    nome: "OLX",
-    descricao: "Importação de anúncios por link XML informado no painel da OLX.",
-    feed: "/feed/olx.xml",
-    estado: "pendente",
-    nota: "1 imóvel com pendência: fotografia abaixo da resolução mínima",
-  },
-];
-
-const cores = {
-  conectado: "bg-emerald-100 text-emerald-800",
-  pendente: "bg-amber-100 text-amber-800",
-  desconectado: "bg-neutral-200 text-neutral-600",
-} as const;
-
-const rotulos = {
-  conectado: "Sincronizado",
-  pendente: "Com pendência",
-  desconectado: "Não conectado",
-} as const;
-
 export const dynamic = "force-dynamic";
 
+const PORTAIS = [
+  { nome: "VivaReal", flag: "publicarZap" as const },
+  { nome: "ZAP Imóveis", flag: "publicarZap" as const },
+  { nome: "OLX", flag: "publicarOlx" as const },
+];
+
 export default async function IntegracoesPage() {
-  const imoveis = await listarImoveisAdmin();
-  const publicaveis = imoveis.filter(
-    (i) => i.status === "disponivel" && !i.isPlaceholder,
-  ).length;
+  const itens = await imoveisParaPortais();
+  const prontos = itens.filter((i) => i.pendencias.length === 0);
+  const bloqueados = itens.filter((i) => i.pendencias.length > 0);
+  const urlFeed = `${site.url}/feed/vrsync.xml`;
 
   return (
     <>
       <PageHeader
         titulo="Integrações"
-        descricao="Os portais leem um feed XML gerado pelo painel. Nada é postado por automação de navegador."
+        descricao="Os portais leem um arquivo XML gerado por este painel. Nada é postado por automação de navegador."
       />
 
       <Card className="mb-6 border-navy/15 bg-navy p-6 text-white">
-        <p className="eyebrow text-gold">Como funciona</p>
+        <p className="eyebrow text-gold-marca">Endereço do feed</p>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-white/75">
-          Cada imóvel é cadastrado uma única vez no painel. O sistema gera um
-          feed XML público que os portais consultam periodicamente. Toda
-          alteração no cadastro aparece no site imediatamente e chega aos
-          portais na leitura seguinte.
+          Informe este endereço ao integrador de cada portal. VivaReal, ZAP e OLX
+          pertencem ao mesmo grupo e leem o mesmo padrão — um arquivo atende os três.
         </p>
-        <p className="mt-4 font-mono text-xs text-gold-soft">
-          Painel → Banco → Feed XML → OLX · ZAP · VivaReal
+
+        <div className="mt-4">
+          <CopiarLink url={urlFeed} />
+        </div>
+
+        <p className="mt-3 text-xs text-white/50">
+          Regenerado a cada meia hora e a cada alteração de imóvel.
         </p>
       </Card>
 
-      <div className="mb-6 grid gap-4 sm:grid-cols-3">
+      <div className="mb-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <Card className="px-5 py-5">
-          <p className="eyebrow text-muted">Imóveis publicáveis</p>
-          <p className="mt-2.5 font-display text-3xl leading-none text-navy">
-            {publicaveis}
+          <p className="eyebrow text-muted">No feed agora</p>
+          <p className="num mt-2 font-display text-2xl leading-none text-navy sm:text-[2rem]">
+            {prontos.length}
           </p>
-          <p className="mt-2 text-xs text-muted">Disponíveis e não placeholder</p>
+          <p className="mt-2 text-xs text-muted">Anúncios válidos</p>
         </Card>
         <Card className="px-5 py-5">
-          <p className="eyebrow text-muted">Portais ativos</p>
-          <p className="mt-2.5 font-display text-3xl leading-none text-navy">2/3</p>
-          <p className="mt-2 text-xs text-muted">OLX aguardando correção</p>
+          <p className="eyebrow text-muted">Com pendência</p>
+          <p
+            className={`num mt-2 font-display text-2xl leading-none sm:text-[2rem] ${
+              bloqueados.length > 0 ? "text-amber-700" : "text-navy"
+            }`}
+          >
+            {bloqueados.length}
+          </p>
+          <p className="mt-2 text-xs text-muted">Marcados, mas fora do feed</p>
         </Card>
-        <Card className="px-5 py-5">
-          <p className="eyebrow text-muted">Última geração do feed</p>
-          <p className="mt-2.5 font-display text-3xl leading-none text-navy">3h</p>
-          <p className="mt-2 text-xs text-muted">Regenerado a cada alteração</p>
-        </Card>
-      </div>
-
-      <div className="space-y-4">
-        {portais.map((p) => (
-          <Card key={p.nome} className="p-6">
-            <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-              <div className="min-w-0">
-                <div className="flex flex-wrap items-center gap-3">
-                  <h2 className="font-display text-xl text-navy">{p.nome}</h2>
-                  <Badge cor={cores[p.estado]}>{rotulos[p.estado]}</Badge>
-                </div>
-                <p className="mt-1.5 text-sm text-muted">{p.descricao}</p>
-                <p className="mt-3 font-mono text-xs break-all text-navy/70">
-                  {site.url}
-                  {p.feed}
-                </p>
-                <p
-                  className={`mt-2 text-xs ${p.estado === "pendente" ? "text-amber-700" : "text-muted"}`}
-                >
-                  {p.nota}
-                </p>
-              </div>
-
-              <div className="flex shrink-0 gap-2">
-                <AdminButton variante="secundaria" type="button">
-                  Copiar link do feed
-                </AdminButton>
-                <AdminButton variante="secundaria" type="button">
-                  Regerar agora
-                </AdminButton>
-              </div>
-            </div>
+        {PORTAIS.filter((p) => p.nome !== "ZAP Imóveis").map((portal) => (
+          <Card key={portal.nome} className="px-5 py-5">
+            <p className="eyebrow text-muted">{portal.nome}</p>
+            <p className="num mt-2 font-display text-2xl leading-none text-navy sm:text-[2rem]">
+              {prontos.filter((i) => i.imovel[portal.flag]).length}
+            </p>
+            <p className="mt-2 text-xs text-muted">Imóveis marcados</p>
           </Card>
         ))}
       </div>
+
+      {bloqueados.length > 0 && (
+        <Card className="mb-6 border-amber-200 p-6">
+          <h2 className="font-display text-xl tracking-tight text-navy">
+            Pendências que impedem a publicação
+          </h2>
+          <p className="mt-1.5 text-sm text-muted">
+            Estes imóveis estão marcados para os portais, mas o anúncio seria
+            recusado. Eles ficam fora do XML até serem corrigidos.
+          </p>
+
+          <ul className="mt-5 divide-y divide-sand">
+            {bloqueados.map(({ imovel, pendencias }) => (
+              <li key={imovel.id} className="py-4">
+                <div className="flex flex-wrap items-baseline justify-between gap-2">
+                  <p className="font-semibold text-graphite">{imovel.titulo}</p>
+                  <Link
+                    href={`/admin/imoveis/${imovel.id}`}
+                    className="text-xs font-semibold text-navy hover:text-gold-dim"
+                  >
+                    Corrigir →
+                  </Link>
+                </div>
+                <ul className="mt-2 space-y-1">
+                  {pendencias.map((p) => (
+                    <li key={p.campo} className="flex gap-2 text-xs text-muted">
+                      <span className="font-semibold text-amber-700">{p.campo}</span>
+                      <span>{p.motivo}</span>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
+      <Card className="p-6">
+        <div className="flex flex-wrap items-baseline justify-between gap-3">
+          <h2 className="font-display text-xl tracking-tight text-navy">
+            Anúncios no feed
+          </h2>
+          <AdminLinkButton href="/admin/imoveis" variante="secundaria">
+            Gerenciar imóveis
+          </AdminLinkButton>
+        </div>
+
+        {prontos.length === 0 ? (
+          <p className="mt-5 rounded-lg border border-dashed border-sand-dark bg-offwhite px-5 py-8 text-center text-sm text-muted">
+            Nenhum imóvel marcado para os portais ainda. Na edição de um imóvel,
+            ative “Publicar na OLX” ou “Publicar no ZAP / VivaReal”.
+          </p>
+        ) : (
+          <ul className="mt-5 divide-y divide-sand">
+            {prontos.map(({ imovel }) => (
+              <li key={imovel.id} className="flex flex-wrap items-center gap-x-3 gap-y-2 py-3.5">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-semibold text-graphite">{imovel.titulo}</p>
+                  <p className="mt-0.5 font-mono text-xs text-muted">{imovel.codigo}</p>
+                </div>
+                {imovel.publicarZap && <Badge>ZAP · VivaReal</Badge>}
+                {imovel.publicarOlx && <Badge>OLX</Badge>}
+                <span className="text-xs text-muted">
+                  {imovel.fotos.length} {imovel.fotos.length === 1 ? "foto" : "fotos"}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Card>
     </>
   );
 }
