@@ -24,10 +24,10 @@ export function SiteHeader({ config }: { config: Configuracao }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[var(--ease-out-soft)] ${
+      className={`fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,box-shadow] duration-500 ease-[var(--ease-out-soft)] ${
         sobreposto
-          ? "border-b border-white/0 bg-transparent"
-          : "border-b border-sand bg-white/85 shadow-[0_1px_24px_-12px] shadow-navy/40 backdrop-blur-xl"
+          ? "border-b border-transparent bg-transparent"
+          : "border-b border-sand bg-white shadow-[0_1px_24px_-12px] shadow-navy/40 lg:bg-white/85 lg:backdrop-blur-xl"
       }`}
     >
       <div
@@ -103,10 +103,13 @@ export function SiteHeader({ config }: { config: Configuracao }) {
         </button>
       </div>
 
-      {/* Menu mobile */}
+      {/* Menu mobile. Só é pintado quando aberto: um bloco branco permanente
+          sob um cabeçalho transparente vaza cor em alguns navegadores móveis. */}
       <div
-        className={`grid overflow-hidden border-sand bg-white transition-[grid-template-rows,border-width] duration-500 ease-[var(--ease-out-soft)] lg:hidden ${
-          aberto ? "grid-rows-[1fr] border-t" : "grid-rows-[0fr] border-t-0"
+        className={`grid overflow-hidden transition-[grid-template-rows] duration-500 ease-[var(--ease-out-soft)] lg:hidden ${
+          aberto
+            ? "grid-rows-[1fr] border-t border-sand bg-white"
+            : "grid-rows-[0fr] border-t-0 bg-transparent"
         }`}
       >
         <nav className="min-h-0">
