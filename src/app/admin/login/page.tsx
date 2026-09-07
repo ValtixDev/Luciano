@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Suspense } from "react";
 import { FormularioLogin } from "@/components/admin/formulario-login";
 import { Ondas } from "@/components/ondas";
@@ -17,13 +18,17 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-sm">
         <div className="mb-8 text-center">
-          <span className="mx-auto flex size-14 items-center justify-center rounded-full border border-gold/40 font-display text-lg leading-none text-gold-soft">
-            LG
-          </span>
-          <h1 className="mt-5 font-display text-2xl tracking-tight text-white">
+          <Image
+            src="/logo-luciano-gois.webp"
+            alt={site.razao}
+            width={866}
+            height={288}
+            priority
+            className="mx-auto h-11 w-auto"
+          />
+          <h1 className="mt-6 font-display text-2xl tracking-tight text-white">
             Painel administrativo
           </h1>
-          <p className="mt-1.5 text-sm text-white/50">{site.razao}</p>
         </div>
 
         <div className="rounded-card border border-white/15 bg-white/95 p-7 shadow-[0_32px_80px_-24px] shadow-navy-950/80 backdrop-blur-sm">

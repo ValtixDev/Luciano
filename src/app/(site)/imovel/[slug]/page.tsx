@@ -15,7 +15,8 @@ import {
   tipoLabel,
   todosSlugs,
 } from "@/lib/imoveis";
-import { site, whatsappUrl } from "@/lib/site";
+import { site } from "@/lib/site";
+import { linkWhatsapp, obterConfig } from "@/lib/configuracoes";
 
 // Slugs novos passam a renderizar sob demanda, sem esperar novo build.
 export const revalidate = 60;
@@ -66,7 +67,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
   if (!imovel) notFound();
 
   const mensagem = `Olá Luciano, tenho interesse no imóvel ${imovel.titulo} (${imovel.codigo}).`;
-  const similares = await relacionados(imovel);
+  const [similares, config] = await Promise.all([relacionados(imovel), obterConfig()]);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -223,8 +224,8 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
               <div className="flex items-center gap-4">
                 <AvatarLuciano className="size-16" />
                 <div className="leading-tight">
-                  <p className="font-display text-xl tracking-tight text-navy">{site.nome}</p>
-                  <p className="text-[0.6875rem] text-muted">{site.creci}</p>
+                  <p className="font-display text-xl tracking-tight text-navy">{config.nome}</p>
+                  <p className="text-[0.6875rem] text-muted">{config.creci}</p>
                 </div>
               </div>
 
@@ -235,7 +236,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
               </p>
 
               <a
-                href={whatsappUrl(mensagem)}
+                href={linkWhatsapp(config, mensagem)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`${estiloBotao("primaria", "lg")} mt-7 w-full`}

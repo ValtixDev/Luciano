@@ -1,8 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { navLinks, site, whatsappUrl } from "@/lib/site";
+import { navLinks } from "@/lib/site";
+import { linkWhatsapp, type Configuracao } from "@/lib/configuracoes";
 
-export function SiteFooter() {
+export function SiteFooter({ config }: { config: Configuracao }) {
   const ano = new Date().getFullYear();
 
   return (
@@ -10,14 +11,14 @@ export function SiteFooter() {
       <div className="container-page relative grid gap-14 py-20 md:grid-cols-[1.5fr_1fr_1fr]">
         <div className="space-y-6">
           <Image
-            src="/logo-luciano-gois.webp"
-            alt={site.razao}
+            src={config.logo}
+            alt={config.razao}
             width={866}
             height={288}
             className="h-14 w-auto"
           />
-          <p className="max-w-sm text-sm leading-[1.7]">{site.descricao}</p>
-          <p className="text-xs tracking-[0.12em] text-white/35">{site.creci}</p>
+          <p className="max-w-sm text-sm leading-[1.7]">{config.textoInstitucional}</p>
+          <p className="text-xs tracking-[0.12em] text-white/35">{config.creci}</p>
         </div>
 
         <div className="space-y-5">
@@ -44,28 +45,28 @@ export function SiteFooter() {
           <ul className="space-y-3 text-sm">
             <li>
               <a
-                href={whatsappUrl("Olá Luciano, vim pelo site.")}
+                href={linkWhatsapp(config)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="num transition-colors duration-300 hover:text-white"
               >
-                {site.telefoneExibicao}
+                {config.telefone}
               </a>
             </li>
             <li>
               <a
-                href={site.instagramUrl}
+                href={config.instagramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="transition-colors duration-300 hover:text-white"
               >
-                {site.instagram}
+                {config.instagram}
               </a>
             </li>
             <li className="pt-2 leading-[1.7] text-white/45">
-              {site.endereco.rua}
+              {config.endereco.rua}
               <br />
-              {site.endereco.bairro} · {site.endereco.cidade}/{site.endereco.estado}
+              {config.endereco.bairro} · {config.endereco.cidade}/{config.endereco.estado}
             </li>
           </ul>
         </div>
@@ -74,7 +75,7 @@ export function SiteFooter() {
       <div className="relative border-t border-white/[0.08]">
         <div className="container-page flex flex-col gap-4 py-7 text-xs md:flex-row md:items-center md:justify-between">
           <p className="text-white/40">
-            © {ano} {site.razao}
+            © {ano} {config.razao}
           </p>
 
           <p className="text-white/40">

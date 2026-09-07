@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { arvore, type Opcao } from "@/data/assistente";
-import { site, whatsappUrl } from "@/lib/site";
+import { linkWhatsapp, type Configuracao } from "@/lib/configuracoes";
 
 type Fala = { autor: "assistente" | "voce"; texto: string };
 
@@ -34,7 +34,7 @@ function tempoDeDigitacao(texto: string) {
   return Math.min(1400, Math.max(450, texto.length * 13));
 }
 
-export function Assistente() {
+export function Assistente({ config }: { config: Configuracao }) {
   const [aberto, setAberto] = useState(false);
   const [noAtual, setNoAtual] = useState("inicio");
   const [filtro, setFiltro] = useState<Record<string, string>>({});
@@ -96,7 +96,7 @@ export function Assistente() {
     setFalas((atuais) => [...atuais, { autor: "voce", texto: opcao.rotulo }]);
 
     if (opcao.whatsapp) {
-      window.open(whatsappUrl(opcao.whatsapp), "_blank", "noopener,noreferrer");
+      window.open(linkWhatsapp(config, opcao.whatsapp), "_blank", "noopener,noreferrer");
       responder("Abri o WhatsApp com essa mensagem pronta. É só enviar.");
       return;
     }
@@ -159,7 +159,7 @@ export function Assistente() {
           <span className="leading-tight">
             <span className="block text-sm font-semibold">Assistente</span>
             <span className="block text-[0.6875rem] text-white/50">
-              {site.nome} · respostas na hora
+              {config.nome} · respostas na hora
             </span>
           </span>
           <button
@@ -228,7 +228,8 @@ export function Assistente() {
                 Ver imóveis que combinam →
               </Link>
               <a
-                href={whatsappUrl(
+                href={linkWhatsapp(
+                  config,
                   `Olá Luciano, vim pelo site procurando imóvel${resumo ? ` — ${resumo}` : ""}. Pode me ajudar?`,
                 )}
                 target="_blank"

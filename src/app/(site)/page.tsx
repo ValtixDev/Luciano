@@ -14,7 +14,7 @@ import { regioes } from "@/data/regioes";
 import { videos } from "@/data/videos";
 import { formatData } from "@/lib/format";
 import { destaques } from "@/lib/imoveis";
-import { site, whatsappUrl } from "@/lib/site";
+import { linkWhatsapp, obterConfig } from "@/lib/configuracoes";
 
 /** Cabeçalho de seção — eyebrow, régua dourada e título. */
 function TituloSecao({
@@ -43,7 +43,11 @@ function TituloSecao({
 export const revalidate = 60;
 
 export default async function Home() {
-  const [emDestaque, posts] = await Promise.all([destaques(3), listarPosts(3)]);
+  const [emDestaque, posts, config] = await Promise.all([
+    destaques(3),
+    listarPosts(3),
+    obterConfig(),
+  ]);
 
   return (
     <>
@@ -86,7 +90,8 @@ export default async function Home() {
                 Explorar imóveis <Seta />
               </BotaoLink>
               <a
-                href={whatsappUrl(
+                href={linkWhatsapp(
+                  config,
                   "Olá Luciano, vim pelo site e gostaria de falar sobre imóveis.",
                 )}
                 target="_blank"
@@ -102,7 +107,7 @@ export default async function Home() {
               style={{ animationDelay: "600ms" }}
             >
               <span className="size-1 rounded-full bg-gold" />
-              {site.creci}
+              {config.creci}
             </p>
           </div>
 
@@ -114,10 +119,10 @@ export default async function Home() {
             <div className="absolute -left-4 top-1/2 h-24 w-px -translate-y-1/2 bg-gradient-to-b from-transparent via-gold/50 to-transparent" />
             <div className="aspect-4/5 overflow-hidden rounded-card">
               <Image
-                src={site.fotos.hero.src}
-                alt={site.fotos.hero.alt}
-                width={site.fotos.hero.largura}
-                height={site.fotos.hero.altura}
+                src={config.retratoHero}
+                alt={`${config.nome}, corretor de imóveis em Maceió`}
+                width={1086}
+                height={1448}
                 sizes="(min-width: 1024px) 45vw, 100vw"
                 priority
                 className="h-full w-full object-cover"
@@ -176,10 +181,10 @@ export default async function Home() {
                 direita e altura por consequência do 4:5. */}
             <div className="aspect-4/5 overflow-hidden rounded-card">
               <Image
-                src={site.fotos.sobre.src}
-                alt={site.fotos.sobre.alt}
-                width={site.fotos.sobre.largura}
-                height={site.fotos.sobre.altura}
+                src={config.retratoSobre}
+                alt={`${config.nome} no escritório em Maceió`}
+                width={1122}
+                height={1402}
                 sizes="(min-width: 1024px) 48vw, 100vw"
                 className="h-full w-full object-cover"
               />
@@ -391,23 +396,24 @@ export default async function Home() {
               <div>
                 <p className="eyebrow text-[0.5625rem] text-muted">Endereço</p>
                 <p className="mt-1.5 text-base leading-relaxed text-graphite">
-                  {site.endereco.rua}
+                  {config.endereco.rua}
                   <br />
-                  {site.endereco.bairro} · {site.endereco.cidade}/{site.endereco.estado}
+                  {config.endereco.bairro} · {config.endereco.cidade}/{config.endereco.estado}
                 </p>
               </div>
 
               <div>
                 <p className="eyebrow text-[0.5625rem] text-muted">WhatsApp</p>
                 <a
-                  href={whatsappUrl(
+                  href={linkWhatsapp(
+                    config,
                     "Olá Luciano, gostaria de agendar uma visita ao escritório.",
                   )}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="num mt-1.5 inline-block text-base font-semibold text-navy transition-colors hover:text-gold-dim"
                 >
-                  {site.telefoneExibicao}
+                  {config.telefone}
                 </a>
               </div>
             </address>
@@ -428,7 +434,7 @@ export default async function Home() {
           </Reveal>
 
           <Reveal delay={140}>
-            <Mapa className="h-[20rem] w-full rounded-card border border-sand shadow-[0_24px_60px_-40px] shadow-navy/50 sm:h-[26rem] lg:h-[32rem]" />
+            <Mapa config={config} className="h-[20rem] w-full rounded-card border border-sand shadow-[0_24px_60px_-40px] shadow-navy/50 sm:h-[26rem] lg:h-[32rem]" />
           </Reveal>
         </div>
       </section>
@@ -439,13 +445,13 @@ export default async function Home() {
           <Reveal className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
             <TituloSecao eyebrow="Instagram" titulo="Acompanhe o mercado comigo" />
             <a
-              href={site.instagramUrl}
+              href={config.instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="group shrink-0 text-sm font-semibold text-navy transition-colors hover:text-gold-dim"
             >
               <span className="relative">
-                {site.instagram}
+                {config.instagram}
                 <span className="absolute inset-x-0 -bottom-1 h-px origin-left scale-x-0 bg-gold transition-transform duration-400 ease-[var(--ease-out-soft)] group-hover:scale-x-100" />
               </span>{" "}
               →
@@ -456,7 +462,7 @@ export default async function Home() {
             {postsInstagram.map((post, i) => (
               <Reveal key={post.id} delay={i * 90}>
                 <a
-                  href={post.href ?? site.instagramUrl}
+                  href={post.href ?? config.instagramUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group block aspect-4/5 overflow-hidden rounded-card"
@@ -504,7 +510,8 @@ export default async function Home() {
             </p>
             <div className="mt-11 flex flex-wrap justify-center gap-3">
               <a
-                href={whatsappUrl(
+                href={linkWhatsapp(
+                  config,
                   "Olá Luciano, vim pelo site e gostaria de conversar sobre imóveis.",
                 )}
                 target="_blank"

@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { estiloBotao } from "@/components/ui/button";
-import { navLinks, site } from "@/lib/site";
+import { navLinks } from "@/lib/site";
+import type { Configuracao } from "@/lib/configuracoes";
 
-export function SiteHeader() {
+export function SiteHeader({ config }: { config: Configuracao }) {
   const pathname = usePathname();
   const [rolou, setRolou] = useState(false);
   const [aberto, setAberto] = useState(false);
@@ -34,10 +35,10 @@ export function SiteHeader() {
           sobreposto ? "h-24" : "h-18"
         }`}
       >
-        <Link href="/" className="flex shrink-0 items-center" aria-label={site.razao}>
+        <Link href="/" className="flex shrink-0 items-center" aria-label={config.razao}>
           <Image
-            src="/logo-luciano-gois.webp"
-            alt={site.razao}
+            src={config.logo}
+            alt={config.razao}
             width={866}
             height={288}
             priority

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact-form";
 import { PageHero } from "@/components/page-hero";
 import { Reveal } from "@/components/reveal";
-import { site, whatsappUrl } from "@/lib/site";
+import { linkWhatsapp, obterConfig } from "@/lib/configuracoes";
 
 export const metadata: Metadata = {
   title: "Contato",
@@ -11,14 +11,16 @@ export const metadata: Metadata = {
   alternates: { canonical: "/contato" },
 };
 
-export default function ContatoPage() {
+export default async function ContatoPage() {
+  const config = await obterConfig();
+
   const canais = [
     {
       rotulo: "WhatsApp",
-      valor: site.telefoneExibicao,
-      href: whatsappUrl("Olá Luciano, vim pela página de contato do site."),
+      valor: config.telefone,
+      href: linkWhatsapp(config, "Olá Luciano, vim pela página de contato do site."),
     },
-    { rotulo: "Instagram", valor: site.instagram, href: site.instagramUrl },
+    { rotulo: "Instagram", valor: config.instagram, href: config.instagramUrl },
   ];
 
   return (
@@ -66,13 +68,13 @@ export default function ContatoPage() {
             <div>
               <p className="eyebrow text-gold-dim">Escritório</p>
               <address className="mt-5 rounded-card border border-sand bg-offwhite px-6 py-5 text-sm not-italic leading-relaxed text-graphite">
-                {site.razao}
+                {config.razao}
                 <br />
-                {site.endereco.rua}
+                {config.endereco.rua}
                 <br />
-                {site.endereco.bairro} · {site.endereco.cidade}/{site.endereco.estado}
+                {config.endereco.bairro} · {config.endereco.cidade}/{config.endereco.estado}
                 <br />
-                <span className="mt-2 inline-block text-xs text-muted">{site.creci}</span>
+                <span className="mt-2 inline-block text-xs text-muted">{config.creci}</span>
               </address>
             </div>
           </Reveal>

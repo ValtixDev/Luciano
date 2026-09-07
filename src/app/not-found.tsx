@@ -1,11 +1,14 @@
 import { SiteFooter } from "@/components/site-footer";
+import { obterConfig } from "@/lib/configuracoes";
 import { SiteHeader } from "@/components/site-header";
 import { BotaoLink } from "@/components/ui/button";
 
-export default function NotFound() {
+export default async function NotFound() {
+  const config = await obterConfig();
+
   return (
     <>
-      <SiteHeader />
+      <SiteHeader config={config} />
       <main className="flex flex-1 items-center bg-offwhite pt-18">
         <div className="container-page max-w-xl py-24 text-center">
           <p className="eyebrow text-gold-dim">Erro 404</p>
@@ -24,7 +27,7 @@ export default function NotFound() {
           </div>
         </div>
       </main>
-      <SiteFooter />
+      <SiteFooter config={config} />
     </>
   );
 }
