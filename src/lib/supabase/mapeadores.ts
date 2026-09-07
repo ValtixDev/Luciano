@@ -32,6 +32,8 @@ export type LinhaImovel = {
   cidade: string;
   bairro: string;
   regiao: string;
+  latitude: number | null;
+  longitude: number | null;
   ocultar_endereco: boolean;
   area_util: string | number | null;
   area_total: string | number | null;
@@ -91,6 +93,8 @@ export function mapearImovel(linha: LinhaImovel): Imovel {
     cidade: linha.cidade,
     bairro: linha.bairro,
     regiao: linha.regiao,
+    latitude: linha.latitude,
+    longitude: linha.longitude,
     ocultarEndereco: linha.ocultar_endereco,
     areaUtil: num(linha.area_util),
     areaTotal: num(linha.area_total),
@@ -149,7 +153,7 @@ export const CAMPOS_IMOVEL = `
   id, codigo, slug, titulo, descricao_curta, descricao,
   finalidade, tipo, status, estagio,
   preco, preco_sob_consulta, condominio, iptu,
-  estado, cidade, bairro, regiao, ocultar_endereco,
+  estado, cidade, bairro, regiao, latitude, longitude, ocultar_endereco,
   area_util, area_total, quartos, suites, banheiros, vagas,
   diferenciais, destaque, publicar_site, publicar_olx, publicar_zap,
   is_placeholder, atualizado_em,
@@ -168,7 +172,7 @@ export const CAMPOS_IMOVEL_RESUMO = `
   id, codigo, slug, titulo, descricao_curta,
   finalidade, tipo, status, estagio,
   preco, preco_sob_consulta, condominio, iptu,
-  estado, cidade, bairro, regiao, ocultar_endereco,
+  estado, cidade, bairro, regiao, latitude, longitude, ocultar_endereco,
   area_util, area_total, quartos, suites, banheiros, vagas,
   diferenciais, destaque, publicar_site, publicar_olx, publicar_zap,
   is_placeholder, atualizado_em,

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { PropertyCard } from "@/components/property-card";
 import { Reveal } from "@/components/reveal";
 import { FotoImovel } from "@/components/foto-imovel";
+import { MapaImovel } from "@/components/mapa-imovel";
 import { AvatarLuciano } from "@/components/avatar-luciano";
 import { estiloBotao, Seta } from "@/components/ui/button";
 import { formatArea, formatPreco } from "@/lib/format";
@@ -212,9 +213,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
                   ? `Região aproximada: ${imovel.bairro}, ${imovel.cidade}/${imovel.estado}. O endereço exato é informado no atendimento.`
                   : `${imovel.bairro}, ${imovel.cidade}/${imovel.estado}.`}
               </p>
-              <div className="mt-6 flex aspect-21/9 items-center justify-center rounded-card border border-dashed border-sand-dark bg-offwhite">
-                <p className="eyebrow text-muted">Mapa — integração pendente</p>
-              </div>
+              <MapaImovel imovel={imovel} />
             </div>
           </div>
 

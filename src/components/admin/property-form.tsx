@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { GerenciadorFotos } from "@/components/admin/gerenciador-fotos";
+import { SeletorMapa } from "@/components/admin/seletor-mapa";
 import { salvarImovel, type EstadoFormulario } from "@/app/admin/(painel)/imoveis/acoes";
 import { AdminButton, AdminLinkButton } from "@/components/admin/ui";
 import { Check, Field, Fieldset, Input, Select, Textarea } from "@/components/admin/fields";
@@ -175,14 +176,18 @@ export function PropertyForm({ imovel }: { imovel?: Imovel }) {
               </Field>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Latitude">
-                <Input name="latitude" placeholder="-9.6498" />
-              </Field>
-              <Field label="Longitude">
-                <Input name="longitude" placeholder="-35.7089" />
-              </Field>
-            </div>
+            <Field
+              label="Localização no mapa"
+              hint="Define o mapa da página do imóvel. Busque pelo endereço ou clique no ponto exato."
+            >
+              <SeletorMapa
+                latitude={imovel?.latitude ?? null}
+                longitude={imovel?.longitude ?? null}
+                enderecoInicial={
+                  imovel ? `${imovel.bairro}, ${imovel.cidade}` : "Maceió, AL"
+                }
+              />
+            </Field>
 
             <Check
               name="ocultarEndereco"

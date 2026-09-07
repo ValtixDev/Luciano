@@ -46,6 +46,8 @@ export type Imovel = {
   cidade: string;
   estado: string;
   regiao: string;
+  latitude: number | null;
+  longitude: number | null;
   ocultarEndereco: boolean;
   areaUtil: number | null;
   areaTotal: number | null;
