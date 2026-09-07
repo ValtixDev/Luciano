@@ -165,6 +165,19 @@ export async function salvarImovel(
   revalidatePath("/admin/imoveis");
   revalidatePath("/imoveis");
   revalidatePath("/");
+
+  // A própria página do imóvel: sem isto, um 404 servido enquanto o imóvel
+  // ainda não era público continuava em cache mesmo depois de publicado.
+  revalidatePath(`/imovel/${registro.slug}`);
+
+  // Slug alterado: o endereço antigo também precisa ser expulso do cache,
+  // senão continua servindo a versão anterior.
+  const slugAnterior = texto(formData, "slugOriginal");
+  if (slugAnterior && slugAnterior !== registro.slug) {
+    revalidatePath(`/imovel/${slugAnterior}`);
+  }
+
+  revalidatePath("/sitemap.xml");
   redirect("/admin/imoveis");
 }
 
@@ -175,9 +188,13 @@ export async function excluirImovel(formData: FormData) {
   const id = texto(formData, "id");
   if (!id) return;
 
+  const slug = texto(formData, "slug");
   await sb.from("imoveis").delete().eq("id", id);
 
   revalidatePath("/admin/imoveis");
   revalidatePath("/imoveis");
+  revalidatePath("/");
+  if (slug) revalidatePath(`/imovel/${slug}`);
+  revalidatePath("/sitemap.xml");
   redirect("/admin/imoveis");
 }

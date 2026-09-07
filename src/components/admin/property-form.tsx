@@ -36,7 +36,13 @@ export function PropertyForm({ imovel }: { imovel?: Imovel }) {
 
   return (
     <form action={acao} className="grid gap-6 xl:grid-cols-[1fr_320px]">
-      {imovel && <input type="hidden" name="id" value={imovel.id} />}
+      {imovel && (
+        <>
+          <input type="hidden" name="id" value={imovel.id} />
+          {/* Permite expulsar o endereço antigo do cache quando o slug muda. */}
+          <input type="hidden" name="slugOriginal" value={imovel.slug} />
+        </>
+      )}
       <div className="space-y-6">
         <Fieldset
           titulo="Informações básicas"

@@ -27,6 +27,7 @@ export default async function EditarImovelPage({
       {/* Fora do formulário principal: HTML não permite <form> aninhado. */}
       <form action={excluirImovel} className="mt-8 border-t border-sand pt-6">
         <input type="hidden" name="id" value={imovel.id} />
+        <input type="hidden" name="slug" value={imovel.slug} />
         <p className="max-w-xl text-sm text-muted">
           Excluir remove o imóvel e suas fotos definitivamente. Para tirá-lo do
           ar sem perder o cadastro, mude o status para “Inativo”.
