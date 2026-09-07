@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { PropertyCard } from "@/components/property-card";
 import { Reveal } from "@/components/reveal";
 import { FotoImovel } from "@/components/foto-imovel";
-import { Monogram } from "@/components/property-photo";
+import { AvatarLuciano } from "@/components/avatar-luciano";
 import { estiloBotao, Seta } from "@/components/ui/button";
 import { formatArea, formatPreco } from "@/lib/format";
 import {
@@ -222,7 +222,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
           <aside>
             <div className="sticky top-28 rounded-card border border-sand bg-offwhite p-8">
               <div className="flex items-center gap-4">
-                <Monogram className="size-14 shrink-0 text-base" />
+                <AvatarLuciano className="size-16" />
                 <div className="leading-tight">
                   <p className="font-display text-xl tracking-tight text-navy">{site.nome}</p>
                   <p className="text-[0.6875rem] text-muted">{site.creci}</p>
