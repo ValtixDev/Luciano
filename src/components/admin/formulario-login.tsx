@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { AdminButton } from "@/components/admin/ui";
-import { Field, Input } from "@/components/admin/fields";
+import { Field, Input, inputCls } from "@/components/admin/fields";
 import { criarClienteNavegador } from "@/lib/supabase/client";
 
 export function FormularioLogin() {
@@ -11,6 +11,7 @@ export function FormularioLogin() {
   const params = useSearchParams();
   const [erro, setErro] = useState<string | null>(null);
   const [enviando, setEnviando] = useState(false);
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   async function entrar(evento: React.FormEvent<HTMLFormElement>) {
     evento.preventDefault();
@@ -65,7 +66,24 @@ export function FormularioLogin() {
       </Field>
 
       <Field label="Senha">
-        <Input name="senha" type="password" required autoComplete="current-password" />
+        <div className="relative">
+          <Input
+            name="senha"
+            type={mostrarSenha ? "text" : "password"}
+            required
+            autoComplete="current-password"
+            className={`${inputCls} pr-11`}
+          />
+          <button
+            type="button"
+            onClick={() => setMostrarSenha((v) => !v)}
+            aria-label={mostrarSenha ? "Ocultar senha" : "Mostrar senha"}
+            aria-pressed={mostrarSenha}
+            className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-muted transition-colors hover:text-navy focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold"
+          >
+            {mostrarSenha ? <OlhoFechado /> : <Olho />}
+          </button>
+        </div>
       </Field>
 
       {erro && (
@@ -81,5 +99,25 @@ export function FormularioLogin() {
         {enviando ? "Entrando…" : "Entrar"}
       </AdminButton>
     </form>
+  );
+}
+
+function Olho() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.7" aria-hidden="true">
+      <path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12Z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  );
+}
+
+function OlhoFechado() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" aria-hidden="true">
+      <path d="M4 4.5 19.5 20" />
+      <path d="M9.9 6.2A9.8 9.8 0 0 1 12 5.5c6.4 0 10 6.5 10 6.5a17 17 0 0 1-3.3 4.1" />
+      <path d="M6.5 8.1A16.6 16.6 0 0 0 2 12s3.6 6.5 10 6.5c1.4 0 2.6-.2 3.7-.6" />
+      <path d="M9.9 10a3 3 0 0 0 4.2 4.2" />
+    </svg>
   );
 }
