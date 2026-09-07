@@ -99,13 +99,13 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
               priority
             />
           </div>
-          <div className="mt-14 space-y-7 text-[1.0625rem] leading-[1.8] text-graphite">
+          <div className="mt-10 space-y-6 text-base leading-[1.75] text-graphite sm:mt-14 sm:space-y-7 sm:text-[1.0625rem] sm:leading-[1.8]">
             {post.conteudo.map((paragrafo, i) => (
               <p key={i}>{paragrafo}</p>
             ))}
           </div>
 
-          <div className="mt-16 rounded-card border border-sand bg-offwhite p-9">
+          <div className="mt-12 rounded-card border border-sand bg-offwhite p-6 sm:mt-16 sm:p-9">
             <h2 className="display-2 text-navy">
               Quer avaliar uma oportunidade específica?
             </h2>

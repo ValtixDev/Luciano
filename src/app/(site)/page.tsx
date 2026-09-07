@@ -52,11 +52,11 @@ export default async function Home() {
   return (
     <>
       {/* ---------------------------------------------------------- HERO */}
-      <section className="grain relative flex min-h-[88svh] items-center overflow-hidden bg-navy text-white">
+      <section className="grain relative flex min-h-[76svh] items-center overflow-hidden bg-navy text-white sm:min-h-[88svh]">
         <div className="absolute inset-0 bg-[radial-gradient(120%_90%_at_78%_18%,#16437f_0%,#081f4c_45%,#040f28_100%)]" />
         {/* Fecha o hero exatamente em navy-950, que é onde a rampa da próxima
             seção começa — sem isso sobra um fio de emenda. */}
-        <div className="container-page relative grid items-center gap-16 py-24 sm:py-32 lg:grid-cols-[1.08fr_0.92fr]">
+        <div className="container-page relative grid items-center gap-12 py-16 sm:gap-16 sm:py-32 lg:grid-cols-[1.08fr_0.92fr]">
           <div className="max-w-2xl">
             <p
               className="eyebrow animate-fade-in text-gold"
@@ -83,10 +83,10 @@ export default async function Home() {
             </p>
 
             <div
-              className="animate-fade-up mt-11 flex flex-wrap gap-3"
+              className="animate-fade-up mt-10 flex flex-col gap-3 sm:mt-11 sm:flex-row sm:flex-wrap"
               style={{ animationDelay: "440ms" }}
             >
-              <BotaoLink href="/imoveis" variante="ouro" tamanho="lg">
+              <BotaoLink href="/imoveis" variante="ouro" tamanho="lg" className="w-full sm:w-auto">
                 Explorar imóveis <Seta />
               </BotaoLink>
               <a
@@ -96,7 +96,7 @@ export default async function Home() {
                 )}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/btn inline-flex h-14 items-center justify-center gap-2.5 rounded-full border border-white/25 px-9 text-sm font-semibold tracking-[0.02em] transition-colors duration-300 hover:border-gold hover:bg-white/[0.06]"
+                className="group/btn inline-flex h-14 w-full items-center justify-center gap-2.5 rounded-full border border-white/25 px-9 text-sm font-semibold tracking-[0.02em] transition-colors duration-300 hover:border-gold hover:bg-white/[0.06] sm:w-auto"
               >
                 Falar com Luciano
               </a>

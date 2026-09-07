@@ -52,9 +52,9 @@ export async function generateMetadata({
 
 function Spec({ valor, rotulo }: { valor: string; rotulo: string }) {
   return (
-    <div className="rounded-card border border-sand bg-white px-5 py-4">
-      <p className="num font-display text-2xl tracking-tight text-navy">{valor}</p>
-      <p className="mt-1 text-[0.625rem] uppercase tracking-[0.14em] text-muted">
+    <div className="rounded-card border border-sand bg-white px-3 py-3 sm:px-5 sm:py-4">
+      <p className="num font-display text-xl tracking-tight text-navy sm:text-2xl">{valor}</p>
+      <p className="mt-1 text-[0.5625rem] uppercase tracking-[0.1em] text-muted sm:text-[0.625rem] sm:tracking-[0.14em]">
         {rotulo}
       </p>
     </div>
@@ -159,17 +159,17 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
       </div>
 
       <section className="py-12 sm:py-16">
-        <div className="container-page grid gap-12 lg:grid-cols-[1fr_360px]">
+        <div className="container-page grid gap-10 lg:grid-cols-[1fr_360px] lg:gap-12">
           <div>
             <p className="eyebrow text-gold">
               {tipoLabel[imovel.tipo]} · {estagioLabel[imovel.estagio]} · {imovel.codigo}
             </p>
             <span className="rule-gold mt-5" />
-            <h1 className="display-1 mt-6 text-navy">{imovel.titulo}</h1>
+            <h1 className="display-1 mt-5 text-navy sm:mt-6">{imovel.titulo}</h1>
             <p className="mt-4 text-base text-muted">
               {imovel.bairro} · {imovel.cidade} · {imovel.estado}
             </p>
-            <p className="num mt-8 font-display text-[2.75rem] leading-none tracking-tight text-graphite">
+            <p className="num mt-7 font-display text-[2.125rem] leading-none tracking-tight text-graphite sm:mt-8 sm:text-[2.75rem]">
               {formatPreco(imovel.preco, imovel.precoSobConsulta)}
             </p>
             {(imovel.condominio || imovel.iptu) && (
@@ -180,7 +180,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
               </p>
             )}
 
-            <div className="mt-9 grid grid-cols-2 gap-3 sm:grid-cols-5">
+            <div className="mt-8 grid grid-cols-3 gap-2 sm:mt-9 sm:grid-cols-5 sm:gap-3">
               <Spec valor={String(imovel.quartos)} rotulo="quartos" />
               <Spec valor={String(imovel.suites)} rotulo="suítes" />
               <Spec valor={String(imovel.banheiros)} rotulo="banheiros" />
@@ -220,7 +220,7 @@ export default async function ImovelPage({ params }: PageProps<"/imovel/[slug]">
 
           {/* CTA STICKY */}
           <aside>
-            <div className="sticky top-28 rounded-card border border-sand bg-offwhite p-8">
+            <div className="rounded-card border border-sand bg-offwhite p-6 sm:p-8 lg:sticky lg:top-28">
               <div className="flex items-center gap-4">
                 <AvatarLuciano className="size-16" />
                 <div className="leading-tight">
