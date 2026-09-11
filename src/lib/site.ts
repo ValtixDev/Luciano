@@ -2,8 +2,8 @@ export const site = {
   nome: "Luciano Góis",
   razao: "Luciano Góis Negócios Imobiliários",
   creci: "CRECI/AL 1983/5946J",
-  telefoneExibicao: "(82) 98147-8085",
-  whatsapp: "5582981478085",
+  telefoneExibicao: "(82) 98874-3028",
+  whatsapp: "5582988743028",
   instagram: "@lucianogoisimoveis",
   instagramUrl: "https://instagram.com/lucianogoisimoveis",
   endereco: {

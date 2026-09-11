@@ -56,7 +56,7 @@ export function FormularioConfiguracoes({ config }: { config: Configuracao }) {
             </Field>
             <Field
               label="WhatsApp"
-              hint="Só números, com DDI e DDD. Ex.: 5582981478085"
+              hint="Só números, com DDI e DDD. Ex.: 5582988743028"
             >
               <Input name="whatsapp" defaultValue={config.whatsapp} inputMode="numeric" />
             </Field>

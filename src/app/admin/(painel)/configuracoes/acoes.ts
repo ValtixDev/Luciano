@@ -23,7 +23,7 @@ export async function salvarConfiguracoes(
   // Só dígitos: o wa.me recusa parênteses, traços e espaços.
   const whatsapp = texto(formData, "whatsapp").replace(/\D/g, "");
   if (whatsapp.length < 12) {
-    return { erro: "O WhatsApp precisa do DDI e do DDD, só números. Ex.: 5582981478085" };
+    return { erro: "O WhatsApp precisa do DDI e do DDD, só números. Ex.: 5582988743028" };
   }
 
   const { error } = await sb
