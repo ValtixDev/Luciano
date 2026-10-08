@@ -28,7 +28,13 @@ const DIFERENCIAIS = [
 ];
 
 /** Formulário de cadastro e edição de imóvel, gravando via server action. */
-export function PropertyForm({ imovel }: { imovel?: Imovel }) {
+export function PropertyForm({
+  imovel,
+  codigoSugerido,
+}: {
+  imovel?: Imovel;
+  codigoSugerido?: string;
+}) {
   const edicao = Boolean(imovel);
   const [estado, acao, enviando] = useActionState<EstadoFormulario, FormData>(
     salvarImovel,
@@ -59,9 +65,19 @@ export function PropertyForm({ imovel }: { imovel?: Imovel }) {
             </Field>
 
             <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Código interno">
-                <Input name="codigo" defaultValue={imovel?.codigo} placeholder="LG-007" />
+              <Field
+                label="Código interno"
+                hint={edicao ? undefined : "Gerado automaticamente"}
+              >
+                <Input
+                  name="codigo"
+                  defaultValue={imovel?.codigo ?? codigoSugerido}
+                  placeholder="LG-007"
+                />
               </Field>
+              {codigoSugerido && (
+                <input type="hidden" name="codigoSugerido" value={codigoSugerido} />
+              )}
               <Field label="Slug (URL)" hint="/imovel/…">
                 <Input
                   name="slug"

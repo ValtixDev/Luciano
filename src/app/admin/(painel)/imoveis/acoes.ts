@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { proximoCodigo } from "@/lib/codigo-imovel";
 import { criarClienteServidor } from "@/lib/supabase/server";
 
 export type EstadoFormulario = { erro?: string };
@@ -39,8 +40,16 @@ export async function salvarImovel(
   if (!sb) return { erro: "Supabase não configurado." };
 
   const titulo = texto(formData, "titulo");
-  const codigo = texto(formData, "codigo");
   if (!titulo) return { erro: "O título é obrigatório." };
+
+  const id = texto(formData, "id");
+
+  // Em branco ou igual ao sugerido pela tela: o código é do sistema, e pode
+  // ser trocado se outro cadastro o ocupar enquanto o formulário estava aberto.
+  const codigoDigitado = texto(formData, "codigo");
+  const codigoAutomatico =
+    !id && (!codigoDigitado || codigoDigitado === texto(formData, "codigoSugerido"));
+  const codigo = codigoDigitado || (id ? "" : await proximoCodigo());
   if (!codigo) return { erro: "O código interno é obrigatório." };
 
   const finalidade = [
@@ -98,23 +107,31 @@ export async function salvarImovel(
     is_placeholder: marcado(formData, "isPlaceholder"),
   };
 
-  const id = texto(formData, "id");
-
   // No cadastro, o id vem do gerenciador de fotos: os arquivos já foram
   // enviados para uma pasta com esse nome antes do imóvel existir.
   const idProvisorio = texto(formData, "imovelIdProvisorio");
 
   // Três ramos em vez de um objeto montado: o supabase-js infere as colunas do
   // literal recebido, então `id` precisa estar presente já na chamada.
-  const { data, error } = id
-    ? await sb.from("imoveis").update(registro).eq("id", id).select("id").single()
-    : idProvisorio
-      ? await sb
-          .from("imoveis")
-          .insert({ ...registro, id: idProvisorio })
-          .select("id")
-          .single()
-      : await sb.from("imoveis").insert(registro).select("id").single();
+  const gravar = () =>
+    id
+      ? sb.from("imoveis").update(registro).eq("id", id).select("id").single()
+      : idProvisorio
+        ? sb
+            .from("imoveis")
+            .insert({ ...registro, id: idProvisorio })
+            .select("id")
+            .single()
+        : sb.from("imoveis").insert(registro).select("id").single();
+
+  let { data, error } = await gravar();
+
+  // Código automático já ocupado: outro cadastro levou o número sugerido.
+  // Uma nova tentativa com o próximo livre resolve sem incomodar o usuário.
+  if (codigoAutomatico && error?.code === "23505" && error.message.includes("codigo")) {
+    registro.codigo = await proximoCodigo();
+    ({ data, error } = await gravar());
+  }
 
   if (error) {
     if (error.code === "23505") {
