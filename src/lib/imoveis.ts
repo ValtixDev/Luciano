@@ -69,8 +69,10 @@ export async function destaques(limite = 3): Promise<Imovel[]> {
   const sb = clientePublico();
   if (!sb) return [];
 
+  // Marcados como destaque vêm primeiro; o resto completa com os mais
+  // recentes, para a home nunca ficar vazia só porque ninguém marcou a caixa.
   const { data } = await consultaPublica(sb)
-    .eq("destaque", true)
+    .order("destaque", { ascending: false })
     .order("atualizado_em", { ascending: false })
     .limit(limite);
 
@@ -81,7 +83,15 @@ export async function buscarPorSlug(slug: string): Promise<Imovel | null> {
   const sb = clientePublico();
   if (!sb) return null;
 
-  const { data } = await consultaPublica(sb).eq("slug", slug).maybeSingle();
+  // O parâmetro da rota pode chegar ainda codificado (%20, %C3%AD…).
+  let alvo = slug;
+  try {
+    alvo = decodeURIComponent(slug);
+  } catch {
+    // Sequência % inválida: segue com o valor cru.
+  }
+
+  const { data } = await consultaPublica(sb).eq("slug", alvo).maybeSingle();
   return data ? mapearImovel(data as LinhaImovel) : null;
 }
 

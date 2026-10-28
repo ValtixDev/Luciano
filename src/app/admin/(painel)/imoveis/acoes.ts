@@ -22,7 +22,11 @@ const numero = (f: FormData, campo: string) => {
 const inteiro = (f: FormData, campo: string) => numero(f, campo) ?? 0;
 const marcado = (f: FormData, campo: string) => f.get(campo) === "on";
 
-/** Fallback de slug a partir do título, quando o campo vem vazio. */
+/**
+ * Normaliza o slug para caber numa URL: sem acento, sem espaço, minúsculo.
+ * Aplicado também ao que é digitado — "Casa em Paripueira" gravado cru virava
+ * `/imovel/Casa%20em%20Paripueira`, que nunca casava com o banco e dava 404.
+ */
 function gerarSlug(valor: string) {
   return valor
     .normalize("NFD")
@@ -69,7 +73,7 @@ export async function salvarImovel(
 
   const registro = {
     codigo,
-    slug: texto(formData, "slug") || gerarSlug(titulo),
+    slug: gerarSlug(texto(formData, "slug")) || gerarSlug(titulo),
     titulo,
     descricao_curta: texto(formData, "descricaoCurta"),
     descricao: texto(formData, "descricao"),
